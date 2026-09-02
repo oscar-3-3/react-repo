@@ -37,7 +37,7 @@ export default function NotesPage() {
         {notes.map((note, index) => (
           <li key={index}>
             <span dangerouslySetInnerHTML={{ __html: note.text }} />
-            <button onClick={() => deleteNote(index)}>Delete</button>
+            <button onClick={() => deleteNote(index)}>Delete me</button>
           </li>
         ))}
       </ul>
