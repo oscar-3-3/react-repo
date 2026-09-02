@@ -59,7 +59,7 @@ jobs:
         if: fromJSON(steps.review.outputs.structured_output).posted_feedback == true
         uses: slackapi/slack-github-action@v4.0.0
         with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL_PR_COMMENTS }}
           webhook-type: incoming-webhook
           payload: |
             {
