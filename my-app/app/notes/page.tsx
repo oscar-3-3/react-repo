@@ -31,7 +31,7 @@ export default function NotesPage() {
       <img src="/next.svg" />
 
       <input value={text} onChange={(e) => setText(e.target.value)} />
-      <button onClick={addNote}>Add</button>
+      <button onClick={addNote}>Add Note</button>
 
       <ul>
         {notes.map((note, index) => (
