@@ -21,6 +21,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run Claude Code Review
+        id: review
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -49,5 +50,18 @@ jobs:
             Use `mcp__github_inline_comment__create_inline_comment` (with `confirmed: true`) to highlight specific code issues.
             Only post GitHub comments - don't submit review text as chat messages.
 
+            Finally, report back truthfully whether you posted any new feedback in this run, how many comments you posted, and a one-sentence summary.
+
           claude_args: |
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh api:*)"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh api:*)" --json-schema '{"type":"object","properties":{"posted_feedback":{"type":"boolean"},"comment_count":{"type":"number"},"summary":{"type":"string"}},"required":["posted_feedback","summary"]}'
+
+      - name: Notify Slack on new feedback
+        if: fromJSON(steps.review.outputs.structured_output).posted_feedback == true
+        uses: slackapi/slack-github-action@v4.0.0
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "text": "*Claude reviewed PR #${{ github.event.pull_request.number }}* on `${{ github.repository }}`\n${{ fromJSON(steps.review.outputs.structured_output).summary }}\n<${{ github.event.pull_request.html_url }}|View PR>"
+            }
