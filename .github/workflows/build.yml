@@ -38,3 +38,14 @@ jobs:
 
       - name: Build
         run: npm run build
+        
+      - name: Notify Slack on failure
+        if: failure()
+        uses: slackapi/slack-github-action@v4.0.0
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "text": "*Build failed* on `${{ github.repository }}` (${{ github.ref_name }})\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run> - triggered by ${{ github.actor }}"
+            }
