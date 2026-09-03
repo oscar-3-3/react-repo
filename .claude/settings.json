@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(& \"C:\\Program Files\\GitHub CLI\\gh.exe\" auth status*)"
+      "PowerShell(& \"C:\\Program Files\\GitHub CLI\\gh.exe\" auth status*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
