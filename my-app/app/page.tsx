@@ -60,7 +60,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Documentation if you need it, feel free to check it out.
+            Documentation if you need it, feel free to check it out and learn more about Next.js.
           </a>
         </div>
       </main>
